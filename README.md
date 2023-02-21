@@ -20,3 +20,5 @@ List of Parametes:
 | -BulkUpdate | BulkUpdate the called object (endpoints listed in the netbox documentation without a leading slash) | [ ]* | none | [string] | `ipam/ip-addresses` |
 | -Select | Select the called object (endpoints listed in the netbox documentation without a leading slash) | [ ]* | none | [bool] | `ipam/ip-addresses` |
 | -Debug | enables debug | [ ] | $false | `$true` |
+
+*one of these is required
