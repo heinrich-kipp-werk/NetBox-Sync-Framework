@@ -39,7 +39,7 @@ function Netbox {
     }
 
     if ($method -eq -1) {
-        Write-Output "Please you need to specify one of these options: -Create, -Delete, -PartialUpdate, -BulkUpdate. For more informations see the Documentation."
+        Write-Output "You need to specify one of these options: -Create, -Delete, -PartialUpdate, -BulkUpdate. For more informations see the Documentation."
         Exit-PSHostProcess
     }
 
@@ -58,9 +58,17 @@ function Netbox {
         }
     }
 
-    $res = Invoke-WebRequest -Headers @{'Authorization' = 'Token ' + $Token; 'Accept' = 'application/json'; 'indent' = '4'} -ContentType 'application/json' -Method $method -UseBasicParsing -Uri $url -Body $($Body | ConvertTo-Json -Depth 64)
+    $Body = ConvertTo-Json -Depth 16 $Body
 
+    $res = Invoke-WebRequest -Headers @{'Authorization' = 'Token ' + $Token; 'Accept' = 'application/json'; 'indent' = '4'} -ContentType 'application/json' -Method $method -UseBasicParsing -Uri $url -Body $Body
     if ($res.StatusCode -gt 199 -and $res.StatusCode -lt 300) {
-        return $($res.Content | ConvertFrom-Json).results
+        $res = $($res.Content | ConvertFrom-Json)
+        if ($null -ne $res.results) {
+            return $res.results
+        }else{
+            return $res
+        }
+    }else{
+        Write-Output "Error: " $res
     }
 }
